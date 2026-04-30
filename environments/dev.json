@@ -1,0 +1,46 @@
+{
+	"id": "fbd65351-8f9c-4d5b-aa5f-dfe0fdc1d739",
+	"name": "FakeStore - Dev",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "https://fakestoreapi.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "product_id",
+			"value": "1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "user_id",
+			"value": "1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "cart_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-04-30T12:04:06.685Z",
+	"_postman_exported_using": "Postman/12.6.0"
+}

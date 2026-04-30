@@ -1,0 +1,40 @@
+{
+	"id": "e5b0b085-61c6-4272-9b9f-37831a31ed61",
+	"name": "FakeStore - Staging",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "product_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "cart_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"color": null,
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2026-04-30T12:04:26.104Z",
+	"_postman_exported_using": "Postman/12.6.0"
+}

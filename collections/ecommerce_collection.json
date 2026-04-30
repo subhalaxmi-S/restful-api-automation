@@ -1,0 +1,318 @@
+{
+  "info": {
+    "_postman_id": "eff95919-9797-4ed8-b549-c9aa6562b560",
+    "name": "FakeStore E-Commerce API Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40102627",
+    "_collection_link": "https://go.postman.co/collection/40102627-eff95919-9797-4ed8-b549-c9aa6562b560?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - Auth",
+      "item": []
+    },
+    {
+      "name": "02 - Products",
+      "item": [
+        {
+          "name": "GET All Products - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function (){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is an array\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json).to.be.an('array');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Array is not empty\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json.length).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Each product has required fields\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    json.forEach(function(product){\r",
+                  "        pm.expect(product).to.have.property('id');\r",
+                  "        pm.expect(product).to.have.property('title');\r",
+                  "        pm.expect(product).to.have.property('price');\r",
+                  "        pm.expect(product).to.have.property('category');\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is below 3000ms\", function(){\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Product by ID - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product ID matches requested ID\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json.id).to.eql(parseInt(pm.environment.get(\"product_id\")));\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Product has correct data types\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json.id).to.be.a('number');\r",
+                  "    pm.expect(json.title).to.be.a('string');\r",
+                  "    pm.expect(json.price).to.be.a('number');\r",
+                  "    pm.expect(json.category).to.be.a('string');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"JSON Schema is valid\", function(){\r",
+                  "    const schema = {\r",
+                  "        type: \"object\",\r",
+                  "        required: [\"id\", \"title\", \"price\", \"description\", \"category\", \"image\", \"rating\"],\r",
+                  "        properties: {\r",
+                  "            id:          { type: \"number\" },\r",
+                  "            title:       { type: \"string\" },\r",
+                  "            price:       { type: \"number\" },\r",
+                  "            description: { type: \"string\" },\r",
+                  "            category:    { type: \"string\" },\r",
+                  "            image:       { type: \"string\" },\r",
+                  "            rating:  {\r",
+                  "                type: \"object\",\r",
+                  "                required: [\"rate\", \"count\"],\r",
+                  "                properties: {\r",
+                  "                    rate:  { type: \"number\" },\r",
+                  "                    count: { type: \"number\" }\r",
+                  "                }\r",
+                  "            }\r",
+                  "        }   \r",
+                  "    };\r",
+                  "    pm.response.to.have.jsonSchema(schema);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/{{product_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "{{product_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Products with Limit - Pagination",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Limit of 5 products returned\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json.length).to.eql(5);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is an array\", function(){\r",
+                  "    pm.expect(pm.response.json()).to.be.an('array');\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products?limit=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Products Sorted Descending",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Products are sorted in descending oreder by ID\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    for(let i=0; i<json.length-1; i++){\r",
+                  "        pm.expect(json[i].id).to.be.above(json[i+1].id);\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{base_url}}/products?sort=desc",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET All Categories - 200 OK",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function(){\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response is an array of strings\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json).to.be.an('array');\r",
+                  "    json.forEach(function(category){\r",
+                  "        pm.expect(category).to.be.a('string');\r",
+                  "    });\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Expected categories exist\", function(){\r",
+                  "    const json = pm.response.json();\r",
+                  "    pm.expect(json).to.include(\"electronics\");\r",
+                  "    pm.expect(json).to.include(\"jewelery\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - Cart",
+      "item": []
+    },
+    {
+      "name": "04 - Users",
+      "item": []
+    },
+    {
+      "name": "05 - Negative Cases",
+      "item": []
+    }
+  ]
+}
