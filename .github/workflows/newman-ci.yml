@@ -1,0 +1,51 @@
+name: Newman API Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  api-tests:
+    name: Run Newman API Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run API tests - Dev environment
+        run: npm test
+
+      - name: Run API tests - Staging environment
+        run: npm run test:staging
+
+      - name: Upload Dev HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newman-dev-report
+          path: reports/report.html
+          retention-days: 30
+
+      - name: Upload Staging HTML report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newman-staging-report
+          path: reports/report-staging.html
+          retention-days: 30

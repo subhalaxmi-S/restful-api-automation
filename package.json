@@ -1,0 +1,22 @@
+{
+  "name": "restful-api-automation",
+  "version": "1.0.0",
+  "description": "Postman + Newman API test automation with GitHub Actions CI",
+  "scripts": {
+    "test": "newman run collections/ecommerce_collection.json -e environments/dev.json -r htmlextra,cli --reporter-htmlextra-export reports/report.html",
+    "test:staging": "newman run collections/ecommerce_collection.json -e environments/staging.json -r htmlextra,cli --reporter-htmlextra-export reports/report-staging.html",
+    "test:cli": "newman run collections/ecommerce_collection.json -e environments/dev.json --reporters cli"
+  },
+  "keywords": [
+    "api-testing",
+    "postman",
+    "newman",
+    "github-actions"
+  ],
+  "author": "Subhalaxmi Sahoo",
+  "license": "ISC",
+  "devDependencies": {
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
